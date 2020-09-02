@@ -16,12 +16,23 @@
 package org.apache.ibatis.parsing;
 
 /**
+ * 通用的 Token 解析器
+ *
  * @author Clinton Begin
  */
 public class GenericTokenParser {
 
+  /**
+   * 开始的 Token 字符串
+   */
   private final String openToken;
+
+  /**
+   * 结束的 Token 字符串
+   */
   private final String closeToken;
+
+
   private final TokenHandler handler;
 
   public GenericTokenParser(String openToken, String closeToken, TokenHandler handler) {
@@ -35,14 +46,19 @@ public class GenericTokenParser {
       return "";
     }
     // search open token
+    // 寻找开始的  openToken 的位置
     int start = text.indexOf(openToken);
+    // 找不到，直接返回
     if (start == -1) {
       return text;
     }
     char[] src = text.toCharArray();
+    // 起始查找位置
     int offset = 0;
     final StringBuilder builder = new StringBuilder();
+    // 匹配到 openToken 和 closeToken 之间的表达式
     StringBuilder expression = null;
+    // 循环匹配
     do {
       if (start > 0 && src[start - 1] == '\\') {
         // this open token is escaped. remove the backslash and continue.
